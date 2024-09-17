@@ -10,6 +10,7 @@ import Foundation
 
 protocol TaskEditPresenterInput {
     func viewDidLoad()
+    func saveButtonDidTap()
 }
 
 protocol TaskEditViewControllerInput: AnyObject {}
@@ -18,4 +19,6 @@ protocol TaskEditInteractorInput {
     
 }
 
-protocol TaskEditRouterInput {}
+protocol TaskEditRouterInput {
+    func dismissEditViewController()
+}

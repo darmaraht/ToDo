@@ -44,6 +44,7 @@ final class TaskEditViewController: UIViewController {
         view.backgroundColor = .systemGray6
         setupUI()
         presenter.viewDidLoad()
+        saveButton.addTarget(self, action: #selector(saveButtonDidTap), for: .touchUpInside)
     }
     
     // MARK: Setup UI
@@ -145,6 +146,12 @@ final class TaskEditViewController: UIViewController {
             $0.height.equalTo(250)
         }
     }
+    
+    @objc
+    private func saveButtonDidTap() {
+        presenter.saveButtonDidTap()
+    }
+    
 }
 
 

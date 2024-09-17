@@ -39,4 +39,8 @@ extension TaskEditPresenter: TaskEditPresenterInput {
         
     }
     
+    func saveButtonDidTap() {
+        router.dismissEditViewController()
+    }
+    
 }

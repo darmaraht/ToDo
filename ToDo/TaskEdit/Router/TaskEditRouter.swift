@@ -12,6 +12,10 @@ internal final class TaskEditRouter {
     
     weak var viewController: UIViewController?
     
+    func dismissEditViewController() {
+        viewController?.dismiss(animated: true, completion: nil)
+    }
+    
 }
 
 extension TaskEditRouter: TaskEditRouterInput {}

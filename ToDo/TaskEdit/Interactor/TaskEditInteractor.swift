@@ -20,11 +20,5 @@ final class TaskEditInteractor {
 
 extension TaskEditInteractor: TaskEditInteractorInput {
 
-//    func updateTask(_ task: TaskDTO, completion: @escaping () -> Void) {
-//        
-//    }
-//
-//    func createTask(_ task: TaskDTO, completion: @escaping () -> Void) {
-//        
-//    }
+
 }

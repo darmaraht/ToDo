@@ -25,7 +25,6 @@ class ApiService {
     
     private let baseURL = "https://dummyjson.com/todos"
     
-    // Загрузка списка задач
     func loadTasks(completion: @escaping (Result<ToDosResponseModel, Error>) -> Void) {
         guard let url = URL(string: baseURL) else {
             completion(.failure(MyError.invalidURL))
