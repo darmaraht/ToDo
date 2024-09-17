@@ -49,6 +49,7 @@ final class TaskListViewController: UIViewController {
         taskListView.updateScrollHandler({ [weak self] offset in
             self?.presenter.didChangeContentOffset(offset)
         })
+        newTaskButton.addTarget(self, action: #selector(newTaskButtonDidTap), for: .touchUpInside)
     }
     
     // MARK: Setup UI
@@ -108,6 +109,8 @@ final class TaskListViewController: UIViewController {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(16)
             $0.right.equalToSuperview().inset(20)
         }
+        
+        
     }
     
     private func setupTabsView() {
@@ -132,7 +135,10 @@ final class TaskListViewController: UIViewController {
         }
     }
     
-    
+    @objc
+    private func newTaskButtonDidTap() {
+        presenter.newTaskButtonDidTap()
+    }
     
 }
 
@@ -150,6 +156,3 @@ extension TaskListViewController: TaskListViewControllerInput {
     }
 }
 
-private extension UIColor {
-    static let buttonColor: UIColor = UIColor(red: 218/255.0, green: 230/255.0, blue: 249/255.0, alpha: 1)
-}

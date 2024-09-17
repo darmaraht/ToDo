@@ -41,7 +41,7 @@ final class TaskListPresenter {
     private func createViewModel() -> TaskListViewModel {
         
         dateFormatter.dateFormat = "EEEE, d MMMM"
-        taskDateFormatter.dateFormat = "a h:mm - h:mm"
+        taskDateFormatter.dateFormat = "EEEE, d MMMM, h:mm a"
         
         var tabsViewModels: [TabViewModel] = []
         var tasksViewModels: [TaskViewModel] = []
@@ -161,5 +161,9 @@ extension TaskListPresenter: TaskListPresenterInput {
     
     func didChangeContentOffset(_ offset: CGPoint) {
         offsetCache[flowModel.selectedTabType] = offset
+    }
+    
+    func newTaskButtonDidTap() {
+        router.routeToTaskEdit()
     }
 }

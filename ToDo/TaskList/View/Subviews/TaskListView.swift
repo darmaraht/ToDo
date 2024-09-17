@@ -67,6 +67,7 @@ class TaskListView: UIView {
     func updateScrollHandler(_ handler: @escaping (CGPoint) -> Void) {
         scrollChangeHandler = handler
     }
+   
 }
 
 // MARK: - UITableViewDataSource
@@ -92,6 +93,7 @@ extension TaskListView: UITableViewDataSource {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         scrollChangeHandler?(taskTableView.contentOffset)
     }
+    
 }
 
 // MARK: - UITableViewDelegate
@@ -99,6 +101,10 @@ extension TaskListView: UITableViewDataSource {
 extension TaskListView: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        return nil
     }
 }
 

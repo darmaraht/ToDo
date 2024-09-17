@@ -13,6 +13,7 @@ protocol TaskListPresenterInput {
     func didSelectTab(with type: TabType)
     func didChangeTaskStatus(with id: String)
     func didChangeContentOffset(_ offset: CGPoint)
+    func newTaskButtonDidTap()
 }
 
 protocol TaskListViewControllerInput: AnyObject {
@@ -23,7 +24,9 @@ protocol TaskListInteractorInput {
     func loadTasks(resultHandler: @escaping (Result<[ToDosResponseModel.ToDoModel], any Error>) -> Void)
 }
 
-protocol TaskListRouterInput {}
+protocol TaskListRouterInput {
+    func routeToTaskEdit()
+}
 
 
 
