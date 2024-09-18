@@ -109,12 +109,12 @@ final class TaskListPresenter {
             }
         }
         
-       
+        
         
         return TaskListViewModel(
             title: "Today's Task",
             dateString: dateFormatter.string(from: Date()),
-            tabsViewModels: tabsViewModels, 
+            tabsViewModels: tabsViewModels,
             taskListTableViewModel: .init(
                 tasksViewModels: tasksViewModels,
                 taskListOffset: offsetCache[flowModel.selectedTabType] ?? .zero
@@ -139,24 +139,24 @@ extension TaskListPresenter: TaskListPresenterInput {
             case .success(let tasks):
                 self.flowModel.tasks = tasks
                 
-//                tasks.forEach {
-//                    let taskDTO = TaskDTO(
-//                        id: "\($0.id)",
-//                        titleText: $0.todo,
-//                        createDate: Date(),
-//                        completed: $0.completed
-//                    )
-//                    self.flowModel.tasks.append( taskDTO )
-//                }
+                //                tasks.forEach {
+                //                    let taskDTO = TaskDTO(
+                //                        id: "\($0.id)",
+                //                        titleText: $0.todo,
+                //                        createDate: Date(),
+                //                        completed: $0.completed
+                //                    )
+                //                    self.flowModel.tasks.append( taskDTO )
+                //                }
                 let viewModel = self.createViewModel()
                 self.view?.updateUI(with: viewModel)
-//                print("Задачи загружены: \(tasks)")
+                //                print("Задачи загружены: \(tasks)")
             case .failure(let error):
                 print("Не удалось загрузить задачи: \(error)")
             }
         })
     }
-  
+    
     
     func didSelectTab(with type: TabType) {
         flowModel.selectedTabType = type
@@ -166,6 +166,10 @@ extension TaskListPresenter: TaskListPresenterInput {
     func didChangeTaskStatus(with id: String) {
         guard let taskIndex = flowModel.tasks.firstIndex(where: { $0.id == id }) else { return }
         flowModel.tasks[taskIndex].completed.toggle()
+        
+        let task = flowModel.tasks[taskIndex]
+        interactor.updateTask(task: task)
+        
         view?.updateUI(with: createViewModel())
     }
     
@@ -174,7 +178,32 @@ extension TaskListPresenter: TaskListPresenterInput {
     }
     
     func newTaskButtonDidTap() {
-        router.routeToTaskEdit(onTaskCreate: { [weak self] in
+        router.routeToTaskEdit(task: nil ,onTaskCreate: { [weak self] in
+            self?.loadTasksAndPresent()
+        })
+    }
+    
+    func deleteTask(with id: String) {
+        interactor.deleteTask(id: id) { [weak self] result in
+            switch result {
+            case .success:
+                self?.flowModel.tasks.removeAll { $0.id == id }
+                let viewModel = self?.createViewModel() ?? TaskListViewModel(
+                    title: "Today's Task",
+                    dateString: self?.dateFormatter.string(from: Date()) ?? "",
+                    tabsViewModels: [],
+                    taskListTableViewModel: .init(tasksViewModels: [], taskListOffset: CGPoint.zero)
+                )
+                self?.view?.updateUI(with: viewModel)
+            case .failure(let error):
+                print("Ошибка при удалении задачи: \(error)")
+            }
+        }
+    }
+    
+    func didSelectTask(with id: String) {
+        let task = flowModel.tasks.first(where: { $0.id == id })
+        router.routeToTaskEdit(task: task, onTaskCreate: { [weak self] in
             self?.loadTasksAndPresent()
         })
     }

@@ -14,6 +14,8 @@ protocol TaskListPresenterInput {
     func didChangeTaskStatus(with id: String)
     func didChangeContentOffset(_ offset: CGPoint)
     func newTaskButtonDidTap()
+    func deleteTask(with id: String)
+    func didSelectTask(with id: String) 
 }
 
 protocol TaskListViewControllerInput: AnyObject {
@@ -22,10 +24,12 @@ protocol TaskListViewControllerInput: AnyObject {
 
 protocol TaskListInteractorInput {
     func loadTasks(resultHandler: @escaping (Result<[TaskDTO], any Error>) -> Void)
+    func updateTask(task: TaskDTO)
+    func deleteTask(id: String, completion: @escaping (Result<Void, Error>) -> Void)
 }
 
 protocol TaskListRouterInput {
-    func routeToTaskEdit(onTaskCreate: @escaping () -> Void)
+    func routeToTaskEdit(task: TaskDTO?, onTaskCreate: @escaping () -> Void)
 }
 
 

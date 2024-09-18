@@ -97,7 +97,7 @@ class TaskTableViewCell: UITableViewCell {
             $0.bottom.equalToSuperview().offset(-20)
         }
     }
-
+    
     func update(with viewModel: TaskViewModel) {
         titleLabel.text = viewModel.title
         subTitleLabel.text = viewModel.description
@@ -125,4 +125,5 @@ class TaskTableViewCell: UITableViewCell {
     private func didTapCheckMark() {
         checkMarkTapHandler?()
     }
+   
 }

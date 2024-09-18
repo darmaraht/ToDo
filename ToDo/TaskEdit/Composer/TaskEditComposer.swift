@@ -10,6 +10,7 @@ import UIKit
 
 public struct TaskEditModuleInputContainer {
     let onTaskCreate: () -> Void
+    let task: TaskDTO?
 }
 
 public enum TaskEditComposer {
@@ -21,6 +22,7 @@ public enum TaskEditComposer {
         let presenter = TaskEditPresenter(
             interactor: interactor,
             router: router,
+            task: input.task,
             onTaskCreate: input.onTaskCreate
         )
         let viewController = TaskEditViewController(presenter: presenter)

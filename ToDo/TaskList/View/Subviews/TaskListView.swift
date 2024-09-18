@@ -13,6 +13,8 @@ class TaskListView: UIView {
     private var taskViewModels: [TaskViewModel] = []
     private var checkMarkTapHandler: ((String) -> Void)? = nil
     private var scrollChangeHandler: ((CGPoint) -> Void)?
+    private var rowSwipeHandler: ((String) -> Void)?
+    private var rowTapHandler: ((String) -> Void)?
     
     // MARK: Subviews
     
@@ -47,7 +49,7 @@ class TaskListView: UIView {
         taskTableView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
-       
+        
         taskTableView.dataSource = self
         taskTableView.delegate = self
         taskTableView.reloadData()
@@ -64,10 +66,18 @@ class TaskListView: UIView {
         self.checkMarkTapHandler = checkMarkTapHandler
     }
     
+    func updaterowTapHandler(rowTapHandler: @escaping (String) -> Void) {
+        self.rowTapHandler = rowTapHandler
+    }
+    
     func updateScrollHandler(_ handler: @escaping (CGPoint) -> Void) {
         scrollChangeHandler = handler
     }
-   
+    
+    func updateSwipeHandler(_ handler: @escaping (String) -> Void) {
+        self.rowSwipeHandler = handler
+    }
+    
 }
 
 // MARK: - UITableViewDataSource
@@ -101,10 +111,21 @@ extension TaskListView: UITableViewDataSource {
 extension TaskListView: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        let taskId = taskViewModels[indexPath.row].id
+        
+        rowTapHandler?(taskId)
     }
     
-    func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        return nil
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { [weak self] (_, _, completionHandler) in
+            guard let self = self else { return }
+            let taskId = self.taskViewModels[indexPath.row].id
+            self.rowSwipeHandler?(taskId)
+            completionHandler(true)
+        }
+        
+        let configuration = UISwipeActionsConfiguration(actions: [deleteAction])
+        return configuration
     }
 }
 

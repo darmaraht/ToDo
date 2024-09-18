@@ -35,6 +35,15 @@ final class TaskEditInteractor {
         
     }
     
+    func updateTask(_ task: TaskDTO) {
+        coreDataService.updateTask(
+            id: task.id,
+            title: task.titleText,
+            description: task.descriptionText,
+            completed: task.completed
+        )
+    }
+    
 }
 
 // MARK: - TaskEditInteractorInput

@@ -59,6 +59,7 @@ public final class CoreDataService: NSObject {
                 taskToUpdate.titleText = title
                 taskToUpdate.descriptionText = description
                 taskToUpdate.completed = completed
+                taskToUpdate.createDate = Date()
                 appDelegate.saveContext()
             }
         } catch {

@@ -15,10 +15,12 @@ protocol TaskEditPresenterInput {
 
 protocol TaskEditViewControllerInput: AnyObject {
     func showError(message: String)
+    func update(title: String, description: String?)
 }
 
 protocol TaskEditInteractorInput {
     func saveTask(task: TaskDTO)
+    func updateTask(_ task: TaskDTO)
 }
 
 protocol TaskEditRouterInput {

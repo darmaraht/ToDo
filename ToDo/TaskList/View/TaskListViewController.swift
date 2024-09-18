@@ -50,6 +50,16 @@ final class TaskListViewController: UIViewController {
             self?.presenter.didChangeContentOffset(offset)
         })
         newTaskButton.addTarget(self, action: #selector(newTaskButtonDidTap), for: .touchUpInside)
+        taskListView.updateSwipeHandler { [weak self] taskId in
+            self?.presenter.deleteTask(with: taskId)
+        }
+        taskListView.updateHandlers(checkMarkTapHandler: { [weak self] id in
+            self?.presenter.didChangeTaskStatus(with: id)
+        })
+        taskListView.updaterowTapHandler { [weak self] idString in
+            self?.presenter.didSelectTask(with: idString)
+        
+        }
     }
     
     // MARK: Setup UI

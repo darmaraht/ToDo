@@ -16,8 +16,9 @@ internal final class TaskListRouter {
 
 extension TaskListRouter: TaskListRouterInput {
     
-    func routeToTaskEdit(onTaskCreate: @escaping () -> Void) {
-        let taskEditViewController = TaskEditComposer.make(input: .init(onTaskCreate: onTaskCreate))
+    func routeToTaskEdit(task: TaskDTO?, onTaskCreate: @escaping () -> Void) {
+        let taskEditViewController = TaskEditComposer.make(input: .init(onTaskCreate: onTaskCreate, task: task))
         viewController?.present(taskEditViewController, animated: true)
     }
+    
 }

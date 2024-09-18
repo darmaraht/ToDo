@@ -165,4 +165,9 @@ extension TaskEditViewController: TaskEditViewControllerInput {
         alert.addAction(UIAlertAction(title: "OK", style: .default))
         present(alert, animated: true)
     }
+    
+    func update(title: String, description: String?) {
+        titleTextField.text = title
+        descriptionTextField.text = description
+    }
 }

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CoreData
 
 final class TaskListInteractor: TaskListInteractorInput {
     
@@ -63,6 +64,20 @@ final class TaskListInteractor: TaskListInteractorInput {
                 }
             }
         }
+    }
+    
+    func updateTask(task: TaskDTO) {
+        CoreDataService.shared.updateTask(
+            id: task.id,
+            title: task.titleText,
+            description: task.descriptionText,
+            completed: task.completed
+        )
+    }
+    
+    func deleteTask(id: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        coreDataService.deleteTask(id: id)
+        completion(.success(()))
     }
     
 }

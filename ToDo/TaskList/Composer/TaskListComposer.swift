@@ -16,7 +16,7 @@ public enum TaskListComposer {
 
     /// Creates new TaskList module.
     public static func make(input: TaskListModuleInputContainer) -> UIViewController {
-        let interactor = TaskListInteractor()
+        let interactor = TaskListInteractor(coreDataService: CoreDataService.shared)
         let router = TaskListRouter()
         let presenter = TaskListPresenter(
             interactor: interactor,
