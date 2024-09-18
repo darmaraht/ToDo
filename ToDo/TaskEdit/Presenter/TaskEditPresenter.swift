@@ -9,24 +9,27 @@
 import Foundation
 
 final class TaskEditPresenter {
-
+    
     // MARK: Dependencies
-
+    
     private let interactor: TaskEditInteractorInput
     private let router: TaskEditRouterInput
     weak var view: TaskEditViewControllerInput?
-
+    
     // MARK: Properties
-
-
+    
+    private var onTaskCreate: (() -> Void)?
+    
     // MARK: Init
-
+    
     init(
         interactor: TaskEditInteractorInput,
-        router: TaskEditRouterInput
+        router: TaskEditRouterInput,
+        onTaskCreate: @escaping () -> Void
     ) {
         self.interactor = interactor
         self.router = router
+        self.onTaskCreate = onTaskCreate
     }
     
 }
@@ -39,7 +42,19 @@ extension TaskEditPresenter: TaskEditPresenterInput {
         
     }
     
-    func saveButtonDidTap() {
+    func saveTaskDidTap(titleText: String, descriptionText: String) {
+        let uuid = UUID().uuidString
+        
+        let taskDTO = TaskDTO(
+            id: uuid,
+            titleText: titleText,
+            descriptionText: descriptionText,
+            createDate: Date(),
+            completed: false
+        )
+        
+        interactor.saveTask(task: taskDTO)
+        onTaskCreate?()
         router.dismissEditViewController()
     }
     

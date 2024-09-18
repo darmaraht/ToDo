@@ -21,11 +21,11 @@ protocol TaskListViewControllerInput: AnyObject {
 }
 
 protocol TaskListInteractorInput {
-    func loadTasks(resultHandler: @escaping (Result<[ToDosResponseModel.ToDoModel], any Error>) -> Void)
+    func loadTasks(resultHandler: @escaping (Result<[TaskDTO], any Error>) -> Void)
 }
 
 protocol TaskListRouterInput {
-    func routeToTaskEdit()
+    func routeToTaskEdit(onTaskCreate: @escaping () -> Void)
 }
 
 

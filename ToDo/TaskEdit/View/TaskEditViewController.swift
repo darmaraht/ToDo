@@ -136,7 +136,6 @@ final class TaskEditViewController: UIViewController {
     private func setupDescriptionTextField() {
         view.addSubview(descriptionTextField)
         descriptionTextField.backgroundColor = .systemBackground
-       // descriptionTextField.placeholder = "Enter the task subtitle"
         descriptionTextField.clipsToBounds = true
         descriptionTextField.layer.cornerRadius = 12
         descriptionTextField.snp.makeConstraints {
@@ -149,7 +148,9 @@ final class TaskEditViewController: UIViewController {
     
     @objc
     private func saveButtonDidTap() {
-        presenter.saveButtonDidTap()
+        let titleText = titleTextField.text ?? ""
+        let descriptionText = descriptionTextField.text ?? ""
+        presenter.saveTaskDidTap(titleText: titleText, descriptionText: descriptionText)
     }
     
 }
@@ -159,5 +160,9 @@ final class TaskEditViewController: UIViewController {
 // MARK: - TaskEditViewControllerInput
 
 extension TaskEditViewController: TaskEditViewControllerInput {
-    
+    func showError(message: String) {
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
+    }
 }

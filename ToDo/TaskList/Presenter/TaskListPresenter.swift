@@ -41,12 +41,13 @@ final class TaskListPresenter {
     private func createViewModel() -> TaskListViewModel {
         
         dateFormatter.dateFormat = "EEEE, d MMMM"
-        taskDateFormatter.dateFormat = "EEEE, d MMMM, h:mm a"
+        taskDateFormatter.dateFormat = "EEEE, d MMMM, h:mm:ss"
         
         var tabsViewModels: [TabViewModel] = []
         var tasksViewModels: [TaskViewModel] = []
-        let openTasks = flowModel.tasks.filter { !$0.completed }
-        let closedTasks = flowModel.tasks.filter { $0.completed }
+        let sortedTasks = flowModel.tasks.sorted(by: { $0.createDate > $1.createDate })
+        let openTasks = sortedTasks.filter { !$0.completed }
+        let closedTasks = sortedTasks.filter { $0.completed }
         
         tabsViewModels = TabType.allCases.map {
             switch $0 {
@@ -72,10 +73,12 @@ final class TaskListPresenter {
             }
         }
         
+        
+        
         switch flowModel.selectedTabType {
             
         case .all:
-            tasksViewModels = flowModel.tasks.map {
+            tasksViewModels = sortedTasks.map {
                 .init(
                     id: $0.id,
                     title: $0.titleText,
@@ -106,6 +109,8 @@ final class TaskListPresenter {
             }
         }
         
+       
+        
         return TaskListViewModel(
             title: "Today's Task",
             dateString: dateFormatter.string(from: Date()),
@@ -124,29 +129,34 @@ final class TaskListPresenter {
 extension TaskListPresenter: TaskListPresenterInput {
     
     func viewDidLoad() {
+        loadTasksAndPresent()
+    }
+    
+    private func loadTasksAndPresent() {
         interactor.loadTasks(resultHandler: { [weak self] result in
             guard let self else { return }
             switch result {
             case .success(let tasks):
-                //self?.flowModel.tasks = tasks.map { TaskDTO(from: $0) }
+                self.flowModel.tasks = tasks
                 
-                tasks.forEach {
-                    let taskDTO = TaskDTO(
-                        id: "\($0.id)",
-                        titleText: $0.todo,
-                        createDate: Date(),
-                        completed: $0.completed
-                    )
-                    self.flowModel.tasks.append( taskDTO )
-                }
+//                tasks.forEach {
+//                    let taskDTO = TaskDTO(
+//                        id: "\($0.id)",
+//                        titleText: $0.todo,
+//                        createDate: Date(),
+//                        completed: $0.completed
+//                    )
+//                    self.flowModel.tasks.append( taskDTO )
+//                }
                 let viewModel = self.createViewModel()
                 self.view?.updateUI(with: viewModel)
-                print("Задачи загружены: \(tasks)")
+//                print("Задачи загружены: \(tasks)")
             case .failure(let error):
                 print("Не удалось загрузить задачи: \(error)")
             }
         })
     }
+  
     
     func didSelectTab(with type: TabType) {
         flowModel.selectedTabType = type
@@ -164,6 +174,8 @@ extension TaskListPresenter: TaskListPresenterInput {
     }
     
     func newTaskButtonDidTap() {
-        router.routeToTaskEdit()
+        router.routeToTaskEdit(onTaskCreate: { [weak self] in
+            self?.loadTasksAndPresent()
+        })
     }
 }

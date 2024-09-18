@@ -9,18 +9,19 @@
 import UIKit
 
 public struct TaskEditModuleInputContainer {
-    
+    let onTaskCreate: () -> Void
 }
 
 public enum TaskEditComposer {
 
     /// Creates new TaskEdit module.
-    public static func make(input: TaskEditModuleInputContainer? = nil) -> UIViewController {
-        let interactor = TaskEditInteractor()
+    public static func make(input: TaskEditModuleInputContainer) -> UIViewController {
+        let interactor = TaskEditInteractor(coreDataService: CoreDataService.shared)
         let router = TaskEditRouter()
         let presenter = TaskEditPresenter(
             interactor: interactor,
-            router: router
+            router: router,
+            onTaskCreate: input.onTaskCreate
         )
         let viewController = TaskEditViewController(presenter: presenter)
         router.viewController = viewController
