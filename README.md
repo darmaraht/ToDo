@@ -4,7 +4,6 @@ ToDo — это iOS приложение для создания заметок,
 
 ![preview](https://github.com/darmaraht/ToDo/blob/main/ToDo.gif)
 ![preview](https://github.com/darmaraht/ToDo/blob/main/ToDo.png)
-![preview](https://github.com/darmaraht/ToDo/blob/main/ToDo2.png)
 
 ### 1. Главный экран:
 - Отображается текущая дата, кнопка для создания новой задачи.
