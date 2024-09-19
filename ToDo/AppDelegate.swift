@@ -31,27 +31,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
     }
     
-    lazy var persistentContainer: NSPersistentContainer = {
-        let container = NSPersistentContainer(name: "TaskDBModel")
-        container.loadPersistentStores { description, error in
-            if let error {
-                print(error.localizedDescription)
-            } else {
-                print("DB URL - ", description.url ?? "")
-            }
-        }
-        return container
-    }()
-    
-    func saveContext() {
-        let context = persistentContainer.viewContext
-        if context.hasChanges {
-            do {
-                try context.save()
-            } catch let error as NSError {
-                print("Ошибка сохранения контекста: \(error), \(error.userInfo)")
-            }
-        }
-    }
+  
 }
 

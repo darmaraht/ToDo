@@ -36,6 +36,7 @@
 		07C39FBF2C99651E00F98332 /* CoreDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07C39FBE2C99651E00F98332 /* CoreDataService.swift */; };
 		07C39FC82C99AE3800F98332 /* TaskDBModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 07C39FC62C99AE3800F98332 /* TaskDBModel.xcdatamodeld */; };
 		07C39FCC2C99AED500F98332 /* TaskDBModel+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07C39FCA2C99AED500F98332 /* TaskDBModel+CoreDataProperties.swift */; };
+		07C39FD12C9C445F00F98332 /* DispatchQueue+Background.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07C39FD02C9C445F00F98332 /* DispatchQueue+Background.swift */; };
 		07F511002C9022900016E522 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07F510FF2C9022900016E522 /* AppDelegate.swift */; };
 		07F511022C9022900016E522 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07F511012C9022900016E522 /* SceneDelegate.swift */; };
 		07F511092C9022910016E522 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 07F511082C9022910016E522 /* Assets.xcassets */; };
@@ -69,6 +70,7 @@
 		07C39FBE2C99651E00F98332 /* CoreDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataService.swift; sourceTree = "<group>"; };
 		07C39FC72C99AE3800F98332 /* TaskDBModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TaskDBModel.xcdatamodel; sourceTree = "<group>"; };
 		07C39FCA2C99AED500F98332 /* TaskDBModel+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TaskDBModel+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		07C39FD02C9C445F00F98332 /* DispatchQueue+Background.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DispatchQueue+Background.swift"; sourceTree = "<group>"; };
 		07F510FC2C9022900016E522 /* ToDo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ToDo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		07F510FF2C9022900016E522 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		07F511012C9022900016E522 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -268,6 +270,7 @@
 				07C39FCA2C99AED500F98332 /* TaskDBModel+CoreDataProperties.swift */,
 				07C39FBE2C99651E00F98332 /* CoreDataService.swift */,
 				07C39FC62C99AE3800F98332 /* TaskDBModel.xcdatamodeld */,
+				07C39FD02C9C445F00F98332 /* DispatchQueue+Background.swift */,
 			);
 			path = CoreData;
 			sourceTree = "<group>";
@@ -386,6 +389,7 @@
 			files = (
 				07C39FAB2C984BE500F98332 /* Colors.swift in Sources */,
 				07C39F692C90B2C400F98332 /* TaskListInteractor.swift in Sources */,
+				07C39FD12C9C445F00F98332 /* DispatchQueue+Background.swift in Sources */,
 				07C39FCC2C99AED500F98332 /* TaskDBModel+CoreDataProperties.swift in Sources */,
 				07C39F902C96D5B200F98332 /* TaskListFlowModel.swift in Sources */,
 				07C39F892C96C4F500F98332 /* ToDosResponseModel.swift in Sources */,

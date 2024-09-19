@@ -27,7 +27,7 @@ final class TaskListInteractor: TaskListInteractorInput {
     // MARK: TaskListInteractorInput
     
     func loadTasks(resultHandler: @escaping (Result<[TaskDTO], any Error>) -> Void) {
-        if let savedTasks = CoreDataService.shared.fetchAllTasks(), !savedTasks.isEmpty {
+        if let savedTasks = CoreDataService.shared.getAllTasks(), !savedTasks.isEmpty {
             print("@@@ - Отображаем задачи из CoreData")
             let mappedTasks = savedTasks.map { task in
                 TaskDTO(

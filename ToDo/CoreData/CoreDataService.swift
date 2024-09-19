@@ -11,19 +11,41 @@ import CoreData
 public final class CoreDataService: NSObject {
     
     public static let shared = CoreDataService()
-    private override init() {}
     
-    private var appDelegate: AppDelegate {
-        UIApplication.shared.delegate as! AppDelegate
+    lazy var persistentContainer: NSPersistentContainer = {
+        let container = NSPersistentContainer(name: "TaskDBModel")
+        container.loadPersistentStores { description, error in
+            if let error {
+                print(error.localizedDescription)
+            } else {
+                print("DB URL - ", description.url ?? "")
+            }
+        }
+        return container
+    }()
+    
+    var context: NSManagedObjectContext {
+        return persistentContainer.viewContext
     }
     
-    private var context: NSManagedObjectContext {
-        appDelegate.persistentContainer.viewContext
+    func saveContext() {
+        let context = persistentContainer.viewContext
+        if context.hasChanges {
+            do {
+                try context.save()
+            } catch let error as NSError {
+                print("Ошибка сохранения контекста: \(error), \(error.userInfo)")
+            }
+        }
     }
     
-    // MARK: CRUD
+}
+
+// MARK: - Public CRUD
+
+extension CoreDataService {
     
-    public func createTask(id: UUID, title: String, description: String?, createDate: Date, completed: Bool) {
+    func createTask(id: UUID, title: String, description: String?, createDate: Date, completed: Bool) {
         guard let taskEntityDescription = NSEntityDescription.entity(forEntityName: "TaskDBModel", in: context) else {
             return
         }
@@ -35,10 +57,10 @@ public final class CoreDataService: NSObject {
         newTask.createDate = createDate
         newTask.completed = completed
         
-        appDelegate.saveContext()
+        self.saveContext()
     }
     
-    public func fetchAllTasks() -> [TaskDBModel]? {
+    func getAllTasks() -> [TaskDBModel]? {
         let fetchRequest = NSFetchRequest<TaskDBModel>(entityName: "TaskDBModel")
         
         do {
@@ -50,7 +72,7 @@ public final class CoreDataService: NSObject {
         }
     }
     
-    public func updateTask(id: String, title: String, description: String?, completed: Bool) {
+    func updateTask(id: String, title: String, description: String?, completed: Bool) {
         let fetchRequest = NSFetchRequest<TaskDBModel>(entityName: "TaskDBModel")
         fetchRequest.predicate = NSPredicate(format: "id == %@", id)
         
@@ -60,21 +82,21 @@ public final class CoreDataService: NSObject {
                 taskToUpdate.descriptionText = description
                 taskToUpdate.completed = completed
                 taskToUpdate.createDate = Date()
-                appDelegate.saveContext()
+                self.saveContext()
             }
         } catch {
             print("Ошибка обновления задачи: \(error.localizedDescription)")
         }
     }
     
-    public func deleteTask(id: String) {
+    func deleteTask(id: String) {
         let fetchRequest = NSFetchRequest<TaskDBModel>(entityName: "TaskDBModel")
         fetchRequest.predicate = NSPredicate(format: "id == %@", id)
         
         do {
             if let taskToDelete = try context.fetch(fetchRequest).first {
                 context.delete(taskToDelete)
-                appDelegate.saveContext()
+                self.saveContext()
             }
         } catch {
             print("Ошибка удаления задачи: \(error.localizedDescription)")
