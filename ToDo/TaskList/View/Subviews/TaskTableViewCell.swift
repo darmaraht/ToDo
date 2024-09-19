@@ -99,15 +99,26 @@ class TaskTableViewCell: UITableViewCell {
     }
     
     func update(with viewModel: TaskViewModel) {
-        titleLabel.text = viewModel.title
+        titleLabel.attributedText = nil
+        titleLabel.text = nil
+        
         subTitleLabel.text = viewModel.description
         dateLabel.text = viewModel.dateString
+        
         if viewModel.isClosed {
             checkMarkButton.setImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
             checkMarkButton.tintColor = .systemBlue
+            
+            let attributedString = NSAttributedString(
+                string: viewModel.title,
+                attributes: [.strikethroughStyle: NSUnderlineStyle.single.rawValue]
+            )
+            titleLabel.attributedText = attributedString
         } else {
             checkMarkButton.setImage(UIImage(systemName: "circle"), for: .normal)
             checkMarkButton.tintColor = .gray
+            
+            titleLabel.text = viewModel.title
         }
     }
     
@@ -125,5 +136,5 @@ class TaskTableViewCell: UITableViewCell {
     private func didTapCheckMark() {
         checkMarkTapHandler?()
     }
-   
+    
 }

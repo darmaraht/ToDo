@@ -21,7 +21,7 @@ final class TaskEditViewController: UIViewController {
     private let titleLabel = UILabel()
     private let titleTextField = UITextField()
     private let descripotionTextLabel = UILabel()
-    private let descriptionTextField = UITextView()
+    private let descriptionTextView = UITextView()
     
     // MARK: Properties
     
@@ -108,8 +108,14 @@ final class TaskEditViewController: UIViewController {
     
     private func setupTitleTextField() {
         view.addSubview(titleTextField)
+        let padding = UIView(frame: CGRect(x: 0, y: 0, width: 20, height: titleTextField.frame.height))
+        titleTextField.leftView = padding
+        titleTextField.rightView = padding
+        titleTextField.leftViewMode = .always
+        titleTextField.rightViewMode = .always
+
         titleTextField.backgroundColor = .systemBackground
-        titleTextField.placeholder = "   Enter the task name"
+        titleTextField.placeholder = "Enter the task name"
         titleTextField.clipsToBounds = true
         titleTextField.layer.cornerRadius = 12
         titleTextField.snp.makeConstraints {
@@ -134,11 +140,12 @@ final class TaskEditViewController: UIViewController {
     }
     
     private func setupDescriptionTextField() {
-        view.addSubview(descriptionTextField)
-        descriptionTextField.backgroundColor = .systemBackground
-        descriptionTextField.clipsToBounds = true
-        descriptionTextField.layer.cornerRadius = 12
-        descriptionTextField.snp.makeConstraints {
+        view.addSubview(descriptionTextView)
+        descriptionTextView.backgroundColor = .systemBackground
+        descriptionTextView.clipsToBounds = true
+        descriptionTextView.layer.cornerRadius = 12
+        descriptionTextView.textContainerInset = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
+        descriptionTextView.snp.makeConstraints {
             $0.top.equalTo(descripotionTextLabel.snp.bottom).offset(8)
             $0.left.equalToSuperview().offset(20)
             $0.right.equalToSuperview().offset(-20)
@@ -149,7 +156,7 @@ final class TaskEditViewController: UIViewController {
     @objc
     private func saveButtonDidTap() {
         let titleText = titleTextField.text ?? ""
-        let descriptionText = descriptionTextField.text ?? ""
+        let descriptionText = descriptionTextView.text ?? ""
         presenter.saveTaskDidTap(titleText: titleText, descriptionText: descriptionText)
     }
     
@@ -168,6 +175,6 @@ extension TaskEditViewController: TaskEditViewControllerInput {
     
     func update(title: String, description: String?) {
         titleTextField.text = title
-        descriptionTextField.text = description
+        descriptionTextView.text = description
     }
 }
