@@ -45,62 +45,76 @@ public final class CoreDataService: NSObject {
 
 extension CoreDataService {
     
-    func createTask(id: UUID, title: String, description: String?, createDate: Date, completed: Bool) {
-        guard let taskEntityDescription = NSEntityDescription.entity(forEntityName: "TaskDBModel", in: context) else {
-            return
-        }
-        
-        let newTask = TaskDBModel(entity: taskEntityDescription, insertInto: context)
-        newTask.id = id
-        newTask.titleText = title
-        newTask.descriptionText = description
-        newTask.createDate = createDate
-        newTask.completed = completed
-        
-        self.saveContext()
-    }
-    
-    func getAllTasks() -> [TaskDBModel]? {
-        let fetchRequest = NSFetchRequest<TaskDBModel>(entityName: "TaskDBModel")
-        
-        do {
-            let tasks = try context.fetch(fetchRequest)
-            return tasks
-        } catch {
-            print("Ошибка загрузки задач: \(error.localizedDescription)")
-            return nil
-        }
-    }
-    
-    func updateTask(id: String, title: String, description: String?, completed: Bool) {
-        let fetchRequest = NSFetchRequest<TaskDBModel>(entityName: "TaskDBModel")
-        fetchRequest.predicate = NSPredicate(format: "id == %@", id)
-        
-        do {
-            if let taskToUpdate = try context.fetch(fetchRequest).first {
-                taskToUpdate.titleText = title
-                taskToUpdate.descriptionText = description
-                taskToUpdate.completed = completed
-                taskToUpdate.createDate = Date()
-                self.saveContext()
+    func createTask(id: UUID, title: String, description: String?, createDate: Date, completed: Bool, completion: (() -> Void)?) {
+        DispatchQueue.background(background: {
+            guard let taskEntityDescription = NSEntityDescription.entity(forEntityName: "TaskDBModel", in: self.context) else {
+                return
             }
-        } catch {
-            print("Ошибка обновления задачи: \(error.localizedDescription)")
-        }
+            
+            let newTask = TaskDBModel(entity: taskEntityDescription, insertInto: self.context)
+            newTask.id = id
+            newTask.titleText = title
+            newTask.descriptionText = description
+            newTask.createDate = createDate
+            newTask.completed = completed
+            
+            self.saveContext()
+        }, completion: {
+            completion?()
+        })
     }
     
-    func deleteTask(id: String) {
-        let fetchRequest = NSFetchRequest<TaskDBModel>(entityName: "TaskDBModel")
-        fetchRequest.predicate = NSPredicate(format: "id == %@", id)
-        
-        do {
-            if let taskToDelete = try context.fetch(fetchRequest).first {
-                context.delete(taskToDelete)
-                self.saveContext()
+    func getAllTasks(completion: @escaping ([TaskDBModel]?) -> Void) {
+        DispatchQueue.background(background: {
+            let fetchRequest = NSFetchRequest<TaskDBModel>(entityName: "TaskDBModel")
+            
+            do {
+                let tasks = try self.context.fetch(fetchRequest)
+                completion(tasks)
+            } catch {
+                print("Ошибка загрузки задач: \(error.localizedDescription)")
+                completion(nil)
             }
-        } catch {
-            print("Ошибка удаления задачи: \(error.localizedDescription)")
-        }
+        })
+    }
+    
+    func updateTask(id: String, title: String, description: String?, completed: Bool, completion: (() -> Void)?) {
+        DispatchQueue.background(background: {
+            let fetchRequest = NSFetchRequest<TaskDBModel>(entityName: "TaskDBModel")
+            fetchRequest.predicate = NSPredicate(format: "id == %@", id as CVarArg)
+            
+            do {
+                if let taskToUpdate = try self.context.fetch(fetchRequest).first {
+                    taskToUpdate.titleText = title
+                    taskToUpdate.descriptionText = description
+                    taskToUpdate.completed = completed
+                    taskToUpdate.createDate = Date()
+                    self.saveContext()
+                }
+            } catch {
+                print("Ошибка обновления задачи: \(error.localizedDescription)")
+            }
+        }, completion: {
+            completion?()
+        })
+    }
+    
+    func deleteTask(id: String, completion: (() -> Void)? = nil) {
+        DispatchQueue.background(background: {
+            let fetchRequest = NSFetchRequest<TaskDBModel>(entityName: "TaskDBModel")
+            fetchRequest.predicate = NSPredicate(format: "id == %@", id as CVarArg)
+            
+            do {
+                if let taskToDelete = try self.context.fetch(fetchRequest).first {
+                    self.context.delete(taskToDelete)
+                    self.saveContext()
+                }
+            } catch {
+                print("Ошибка удаления задачи: \(error.localizedDescription)")
+            }
+        }, completion: {
+            completion?()
+        })
     }
     
     

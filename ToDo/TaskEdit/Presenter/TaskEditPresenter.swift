@@ -51,7 +51,10 @@ extension TaskEditPresenter: TaskEditPresenterInput {
         if var inputTask {
             inputTask.titleText = titleText
             inputTask.descriptionText = descriptionText
-            interactor.updateTask(inputTask)
+            interactor.updateTask(inputTask, completion: { [weak self] in
+                self?.onTaskCreate?()
+                self?.router.dismissEditViewController()
+            })
         } else {
             let uuid = UUID().uuidString
             let taskDTO = TaskDTO(
@@ -61,9 +64,11 @@ extension TaskEditPresenter: TaskEditPresenterInput {
                 createDate: Date(),
                 completed: false
             )
-            interactor.saveTask(task: taskDTO)
+            interactor.saveTask(task: taskDTO, completion: { [weak self] in
+                self?.onTaskCreate?()
+                self?.router.dismissEditViewController()
+            })
         }
-        onTaskCreate?()
-        router.dismissEditViewController()
+        
     }
 }

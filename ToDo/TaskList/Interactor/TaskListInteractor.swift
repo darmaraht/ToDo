@@ -27,43 +27,46 @@ final class TaskListInteractor: TaskListInteractorInput {
     // MARK: TaskListInteractorInput
     
     func loadTasks(resultHandler: @escaping (Result<[TaskDTO], any Error>) -> Void) {
-        if let savedTasks = CoreDataService.shared.getAllTasks(), !savedTasks.isEmpty {
-            print("@@@ - Отображаем задачи из CoreData")
-            let mappedTasks = savedTasks.map { task in
-                TaskDTO(
-                    id: task.id?.uuidString ?? "",
-                    titleText: task.titleText ?? "",
-                    descriptionText: task.descriptionText,
-                    createDate: task.createDate ?? Date(),
-                    completed: task.completed
-                )
-            }
-            resultHandler(.success(mappedTasks))
-        }  else {
-            print("@@@ - Отображаем задачи из Api")
-            ApiService.shared.loadTasks { result in
-                switch result {
-                case .success(let responseModel):
-                    let todos = responseModel.todos
-                    
-                    todos.forEach { todo in
-                        CoreDataService.shared.createTask(
-                            id: UUID(),
-                            title: todo.todo,
-                            description: "",
-                            createDate: .now,
-                            completed: todo.completed
-                        )
+        CoreDataService.shared.getAllTasks(completion: { tasks in
+            if let savedTasks = tasks, !savedTasks.isEmpty {
+                print("@@@ - Отображаем задачи из CoreData")
+                let mappedTasks = savedTasks.map { task in
+                    TaskDTO(
+                        id: task.id?.uuidString ?? "",
+                        titleText: task.titleText ?? "",
+                        descriptionText: task.descriptionText,
+                        createDate: task.createDate ?? Date(),
+                        completed: task.completed
+                    )
+                }
+                resultHandler(.success(mappedTasks))
+            }  else {
+                print("@@@ - Отображаем задачи из Api")
+                ApiService.shared.loadTasks { result in
+                    switch result {
+                    case .success(let responseModel):
+                        let todos = responseModel.todos
+                        
+                        todos.forEach { todo in
+                            CoreDataService.shared.createTask(
+                                id: UUID(),
+                                title: todo.todo,
+                                description: "",
+                                createDate: .now,
+                                completed: todo.completed,
+                                completion: {}
+                            )
+                        }
+                        
+                        let mappedTasks = todos.map { TaskDTO(from: $0) }
+                        resultHandler(.success(mappedTasks))
+                        
+                    case .failure(let error):
+                        resultHandler(.failure(error))
                     }
-                    
-                    let mappedTasks = todos.map { TaskDTO(from: $0) }
-                    resultHandler(.success(mappedTasks))
-                    
-                case .failure(let error):
-                    resultHandler(.failure(error))
                 }
             }
-        }
+        })
     }
     
     func updateTask(task: TaskDTO) {
@@ -71,7 +74,8 @@ final class TaskListInteractor: TaskListInteractorInput {
             id: task.id,
             title: task.titleText,
             description: task.descriptionText,
-            completed: task.completed
+            completed: task.completed,
+            completion: {}
         )
     }
     

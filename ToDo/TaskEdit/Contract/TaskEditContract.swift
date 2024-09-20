@@ -19,8 +19,8 @@ protocol TaskEditViewControllerInput: AnyObject {
 }
 
 protocol TaskEditInteractorInput {
-    func saveTask(task: TaskDTO)
-    func updateTask(_ task: TaskDTO)
+    func saveTask(task: TaskDTO, completion: (() -> Void)?)
+    func updateTask(_ task: TaskDTO, completion: (() -> Void)?)
 }
 
 protocol TaskEditRouterInput {

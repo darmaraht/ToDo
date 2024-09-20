@@ -149,7 +149,9 @@ extension TaskListPresenter: TaskListPresenterInput {
                 //                    self.flowModel.tasks.append( taskDTO )
                 //                }
                 let viewModel = self.createViewModel()
-                self.view?.updateUI(with: viewModel)
+                DispatchQueue.main.async {
+                    self.view?.updateUI(with: viewModel)
+                }
                 //                print("Задачи загружены: \(tasks)")
             case .failure(let error):
                 print("Не удалось загрузить задачи: \(error)")
