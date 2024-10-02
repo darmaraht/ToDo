@@ -7,9 +7,9 @@
 
 import Foundation
 
-struct ToDosResponseModel: Codable {
+struct ToDosResponseModel: Decodable {
     
-    struct ToDoModel: Codable {
+    struct ToDoModel: Decodable {
         let id: Int
         let todo: String
         let completed: Bool

@@ -8,7 +8,7 @@
 
 import UIKit
 
-internal final class TaskListRouter {
+final class TaskListRouter {
     
     weak var viewController: UIViewController?
     

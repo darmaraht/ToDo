@@ -8,7 +8,7 @@
 
 import UIKit
 
-internal final class TaskEditRouter {
+final class TaskEditRouter {
     
     weak var viewController: UIViewController?
     

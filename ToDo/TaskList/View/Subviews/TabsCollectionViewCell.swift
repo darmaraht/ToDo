@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class TabsCollectionViewCell: UICollectionViewCell {
+final class TabsCollectionViewCell: UICollectionViewCell {
 
     
     // MARK: SubViews
